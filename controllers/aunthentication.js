@@ -11,9 +11,10 @@ const saltRounds = 10;
 
 // POST '/auth/signup'
 exports.signUpController = (req, res, next) => {
-  console.log("SISSADSADASDLKJ");
   // 2 - Destructure the password and username
+  console.log(req.body);
   const { username, password } = req.body;
+
   if (username == undefined) {
     return res.status(200).json({ success: false });
   }
@@ -112,7 +113,7 @@ exports.loginController = (req, res, next) => {
 
         let jwtSecretKey = process.env.SESSION_SECRET;
         let data = {
-          user_id: newUserObj._id,
+          user_id: userData._id,
           date: new Date(),
         };
 

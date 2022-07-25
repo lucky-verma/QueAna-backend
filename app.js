@@ -15,7 +15,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 var bodyParser = require("body-parser");
 var OAuthClient = require("intuit-oauth");
-
+var cors = require("cors");
 var app = express();
 
 // Setup env file
@@ -23,7 +23,7 @@ dotenv.config({ path: "./.env" });
 
 // Connecting to DB
 connection = connectDB();
-
+app.use(cors());
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -47,7 +47,7 @@ app.use(
   })
 );
 
-app.use("/", indexRouter);
+// app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/qb", qbRouter);

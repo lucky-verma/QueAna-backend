@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const answersSchema = new Schema(
   {
     answer: String,
-    qb_id: {
+    question_id: {
       type: mongoose.Types.ObjectId,
     },
     image: {
