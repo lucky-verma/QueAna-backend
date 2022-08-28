@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const examSchema = new Schema(
   {
-    // exam String,
+    name: String,
     start_time: {
       type: Date,
     },
@@ -12,6 +12,12 @@ const examSchema = new Schema(
     },
     duration: {
       type: Number,
+    },
+    problem_context: {
+      type: String,
+    },
+    data_summary: {
+      type: String,
     },
   },
   {
@@ -22,6 +28,6 @@ const examSchema = new Schema(
   }
 );
 
-const AnswersModel = mongoose.model("exam", examSchema);
+const ExamModel = mongoose.model("exam", examSchema);
 
-module.exports = AnswersModel;
+module.exports = ExamModel;

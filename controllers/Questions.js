@@ -20,9 +20,10 @@ exports.updateImagesForQuestion = async (req, res, next) => {
   //Save the file
 
   //Update the url
-    const updateQuestion = await QuestionsModel.updateOne({ _id: body.question_id }, {
-    //    images :
-    })
-    
-    
+  const updateQuestion = await QuestionsModel.updateOne(
+    { _id: body.question_id },
+    {
+      //    images :
+    }
+  );
 };

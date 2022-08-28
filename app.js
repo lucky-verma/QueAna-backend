@@ -10,7 +10,7 @@ const colors = require("colors");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
-const qbRouter = require("./routes/question_bank");
+const examRouter = require("./routes/exam");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 var bodyParser = require("body-parser");
@@ -49,8 +49,8 @@ app.use(
 
 // app.use("/", indexRouter);
 app.use("/auth", authRouter);
+app.use("/exam", examRouter);
 app.use("/users", usersRouter);
-app.use("/qb", qbRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -25,6 +25,6 @@ const behaviourSchema = new Schema(
   }
 );
 
-const AnswersModel = mongoose.model("behaviour", behaviourSchema);
+const BehaviourModel = mongoose.model("behaviour", behaviourSchema);
 
-module.exports = AnswersModel;
+module.exports = BehaviourModel;

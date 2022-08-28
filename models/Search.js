@@ -19,6 +19,6 @@ const SearchSchema = new Schema(
   }
 );
 
-const AnswersModel = mongoose.model("Search", SearchSchema);
+const SearchModel = mongoose.model("Search", SearchSchema);
 
-module.exports = AnswersModel;
+module.exports = SearchModel;
