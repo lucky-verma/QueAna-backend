@@ -4,11 +4,15 @@ const Schema = mongoose.Schema;
 const questionSchema = new Schema(
   {
     question: String,
-    qb_id: {
+    exam_id: {
       type: mongoose.Types.ObjectId,
     },
+
     images: {
       type: Array,
+    },
+    explain: {
+      type: String,
     },
   },
   {

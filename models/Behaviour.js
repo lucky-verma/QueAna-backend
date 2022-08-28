@@ -1,17 +1,20 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const answersSchema = new Schema(
+const behaviourSchema = new Schema(
   {
-    // answer: String,
-    question_id: {
+    // behaviour String,
+    exam_id: {
       type: mongoose.Types.ObjectId,
     },
-    image: {
+    user_id: {
+      type: mongoose.Types.ObjectId,
+    },
+    pre_reflection: {
       type: String,
     },
-    is_correct: {
-      type: Boolean,
+    pos_reflection: {
+      type: String,
     },
   },
   {
@@ -22,6 +25,6 @@ const answersSchema = new Schema(
   }
 );
 
-const AnswersModel = mongoose.model("answers", answersSchema);
+const AnswersModel = mongoose.model("behaviour", behaviourSchema);
 
 module.exports = AnswersModel;

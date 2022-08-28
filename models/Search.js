@@ -1,17 +1,14 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const answersSchema = new Schema(
+const SearchSchema = new Schema(
   {
-    // answer: String,
-    question_id: {
+    // Search String,
+    exam_id: {
       type: mongoose.Types.ObjectId,
     },
-    image: {
+    user_id: {
       type: String,
-    },
-    is_correct: {
-      type: Boolean,
     },
   },
   {
@@ -22,6 +19,6 @@ const answersSchema = new Schema(
   }
 );
 
-const AnswersModel = mongoose.model("answers", answersSchema);
+const AnswersModel = mongoose.model("Search", SearchSchema);
 
 module.exports = AnswersModel;

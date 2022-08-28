@@ -4,6 +4,8 @@ const Schema = mongoose.Schema;
 const qbSchema = new Schema(
   {
     name: String,
+    difficulty: String,
+    exam_id: mongoose.Types.ObjectId,
   },
   {
     timestamps: {
