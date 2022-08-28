@@ -11,6 +11,11 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const examRouter = require("./routes/exam");
+const questionRouter = require("./routes/question");
+const customerRouter = require("./routes/customer");
+const behaviourRouter = require("./routes/behaviour");
+const answerRouter = require("./routes/answer");
+const searchRouter = require("./routes/search");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 var bodyParser = require("body-parser");
@@ -51,6 +56,11 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/exam", examRouter);
 app.use("/users", usersRouter);
+app.use("/question", questionRouter);
+app.use("/customer", customerRouter);
+app.use("/behaviour", behaviourRouter);
+app.use("/answer", answerRouter);
+app.use("/search", searchRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
