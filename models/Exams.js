@@ -13,6 +13,12 @@ const examSchema = new Schema(
     duration: {
       type: Number,
     },
+    difficulty: {
+      type: String,
+    },
+    total_questions: {
+      type: Number,
+    },
     problem_context: {
       type: String,
     },

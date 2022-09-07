@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const answersSchema = new Schema(
   {
-    // answer: String,
+    answer: String,
     question_id: {
       type: mongoose.Types.ObjectId,
     },

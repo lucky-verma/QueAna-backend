@@ -7,10 +7,14 @@ const connectDB = require("./utils/db");
 const dotenv = require("dotenv");
 const colors = require("colors");
 // const bodyParser = require("÷")
+
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const examRouter = require("./routes/exam");
+const questionRouter = require("./routes/question");
+const answerRouter = require("./routes/answer");
+
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 var bodyParser = require("body-parser");
@@ -51,6 +55,8 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/exam", examRouter);
 app.use("/users", usersRouter);
+app.use("/question", questionRouter);
+app.use("/answer", answerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

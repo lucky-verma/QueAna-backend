@@ -8,8 +8,11 @@ const questionSchema = new Schema(
       type: mongoose.Types.ObjectId,
     },
 
-    images: {
-      type: Array,
+    question_no: {
+      type: Number,
+    },
+    image: {
+      type: String,
     },
     explain: {
       type: String,
