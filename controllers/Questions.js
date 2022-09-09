@@ -6,7 +6,9 @@ const { v4: uuidv4 } = require("uuid");
 const QUESTION_FIELDS = ["question", "exam_id", "explain", "question_no"];
 
 exports.getQuestions = async (req, res, next) => {
-  const questions = await QuestionsModel.find();
+  const questions = await QuestionsModel.find({
+    exam_id: req.query.exam_id,
+  }).sort({ question_no: 1 });
   res.status(200).json({ sucess: true, questions });
 };
 

@@ -5,6 +5,6 @@ var router = express.Router();
 
 // Not needed
 // POST '/auth/signup'
-router.get("/list", getCustomer);
-router.post("/create", createCustomer);
+// router.get("/list", getCustomer);
+// router.post("/create", createCustomer);
 module.exports = router;
