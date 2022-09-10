@@ -3,6 +3,7 @@ const fs = require("fs");
 var base64ToImage = require("base64-to-image");
 const { v4: uuidv4 } = require("uuid");
 // c { nanoid } from "nanoid";
+const { Types } = require("mongoose");
 const QUESTION_FIELDS = ["question", "exam_id", "explain", "question_no"];
 
 exports.getQuestions = async (req, res, next) => {
@@ -10,6 +11,23 @@ exports.getQuestions = async (req, res, next) => {
     exam_id: req.query.exam_id,
   }).sort({ question_no: 1 });
   res.status(200).json({ sucess: true, questions });
+};
+
+exports.getQuestionById = async (req, res, next) => {
+  // console.lo g(questi);
+  const question = await QuestionsModel.aggregate([
+    { $match: { _id: new Types.ObjectId(req.query.question_id) } },
+    {
+      $lookup: {
+        from: "answers",
+        localField: "_id",
+        foreignField: "question_id",
+        as: "answers",
+      },
+    },
+  ]);
+
+  res.status(200).json({ success: true, question });
 };
 
 exports.createQuestions = async (req, res, next) => {

@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const answersSchema = new Schema(
   {
     answer: String,
+    option: { type: String, enum: ["A", "B", "C", "D"] },
     question_id: {
       type: mongoose.Types.ObjectId,
     },

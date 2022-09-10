@@ -12,21 +12,22 @@ const saltRounds = 10;
 // POST '/auth/signup'
 exports.signUpController = (req, res, next) => {
   // 2 - Destructure the password and username
-  console.log(req.body);
-  const { username, password } = req.body;
+  // console.log(req.body);
+  const { username, password, full_name } = req.body;
 
   if (username == undefined) {
     return res.status(200).json({ success: false });
   }
 
   // 3 - Check if the username and password are empty strings
-  if (username === "" || password === "") {
-    res.render("login", {
-      successMessage: false,
-      errorMessage: "Provide username and password.",
+  if (username === "" || password === "" || full_name == "") {
+    return res.status(401).json({
+      success: false,
+      errorMessage: "Username and password not found!",
     });
     return;
   }
+  console.log("asdsajdlk");
 
   // 4 - Check if the username already exists - if so send error
 
@@ -42,18 +43,24 @@ exports.signUpController = (req, res, next) => {
       }
 
       // > If username doesn't exist, generate salts and hash the password
+      console.log("BUG BELOW HERE");
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
 
       // > Create the user in the DB
-      User.create({ username, password: hashedPassword })
+
+      User.create({ username, password: hashedPassword, full_name })
         .then((newUserObj) => {
           let jwtSecretKey = process.env.SESSION_SECRET;
           let data = {
             user_id: newUserObj._id,
+            email: newUserObj.username,
+            full_name: newUserObj.full_name,
+            username: newUserObj.username,
             date: new Date(),
           };
 
+          console.log("INsdsadsklj");
           const token = jwt.sign(data, jwtSecretKey);
           // save user token
 
@@ -72,65 +79,73 @@ exports.signUpController = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+exports.getUserInfo = async (req, res, next) => {
+  const user = await User.find({ _id: req.query.user_id });
+  if (user.length == 0) {
+    return res.status(401).json({ success: false });
+  }
+
+  return res.status(200).json({ success: true, user: user[0] });
+};
 // POST 'auth/login'
-exports.loginController = (req, res, next) => {
+exports.loginController = async (req, res, next) => {
   // Deconstruct the password and the user
   const { username, password: enteredPassword } = req.body;
 
   // Check if username or password are empty strings
   if (username === "" || enteredPassword === "") {
-    res.render("/login", {
-      errorMessage: "Provide username and password",
-      successMessage: false,
+    return res.status(401).json({
+      success: false,
+      errorMessage: "Username and password not found!",
     });
     return;
   }
+
+  console.log("The  APple");
   // Find the user by username
-  User.findOne({ username })
-    .then((userData) => {
-      // If - username doesn't exist - return error
-      if (!userData) {
-        res.render({
-          successMessage: false,
-          errorMessage: "Username not found!",
-        });
-        return;
-      }
 
-      // If username exists - check if the password is correct
-      const hashedPasswordFromDB = userData.password; // Hashed password saved in DB during signup
+  console.log("username", username);
+  const user_list = await User.find({ username: username });
 
-      const passwordCorrect = bcrypt.compareSync(
-        enteredPassword,
-        hashedPasswordFromDB
-      );
+  if (user_list.length == 0) {
+    return res.status(401).json({
+      success: false,
+      errorMessage: "Username and password combination invalid!",
+    });
+  }
 
-      // If password is correct - create session (& cookie) and redirect
+  let userData = user_list[0];
 
-      if (passwordCorrect) {
-        // Save the login in the session ( and create cookie )
-        // And redirect the user
+  const hashedPasswordFromDB = userData.password; // Hashed password saved in DB during signup
 
-        let jwtSecretKey = process.env.SESSION_SECRET;
-        let data = {
-          user_id: userData._id,
-          date: new Date(),
-        };
+  const passwordCorrect = bcrypt.compareSync(
+    enteredPassword,
+    hashedPasswordFromDB
+  );
+  // If password is correct - create session (& cookie) and redirect
+  if (passwordCorrect) {
+    // Save the login in the session ( and create cookie )
+    // And redirect the user
 
-        const token = jwt.sign(data, jwtSecretKey);
-        // save user token
+    let jwtSecretKey = process.env.SESSION_SECRET;
+    let data = {
+      user_id: userData._id,
+      email: userData.username,
+      full_name: userData.full_name,
+      username: userData.username,
+      date: new Date(),
+    };
 
-        res.json({ success: true, token: token });
-      } else {
-        res.render("login", {
-          successMessage: false,
-          errorMessage: "Username and password did not match!",
-        });
-      }
+    const token = jwt.sign(data, jwtSecretKey);
+    // save user token
 
-      // Else - if password incorrect - return error
-    })
-    .catch((err) => console.log(err));
+    return res.json({ success: true, token: token });
+  } else {
+    return res.status(401).json({
+      success: false,
+      errorMessage: "Username and password does not match!",
+    });
+  }
 };
 
 //Check if user is logged in

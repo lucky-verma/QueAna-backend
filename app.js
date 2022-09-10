@@ -20,12 +20,13 @@ const searchRouter = require("./routes/search");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 var bodyParser = require("body-parser");
-var OAuthClient = require("intuit-oauth");
+dotenv.config({ path: ".env" });
+
+console.log(process.env.SESSION_SECRET);
 var cors = require("cors");
 var app = express();
 
 // Setup env file
-dotenv.config({ path: "./.env" });
 
 // Connecting to DB
 connection = connectDB();
@@ -33,7 +34,9 @@ app.use(cors());
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: "50mb" }));
+
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(logger("dev"));
 app.use(express.json());

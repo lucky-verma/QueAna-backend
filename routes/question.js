@@ -1,5 +1,9 @@
 var express = require("express");
-const { getQuestions, createQuestions } = require("../controllers/Questions");
+const {
+  getQuestions,
+  createQuestions,
+  getQuestionById,
+} = require("../controllers/Questions");
 
 var router = express.Router();
 
@@ -7,4 +11,5 @@ var router = express.Router();
 // POST '/auth/signup'
 router.get("/list", getQuestions);
 router.post("/create", createQuestions);
+router.get("/question", getQuestionById);
 module.exports = router;
