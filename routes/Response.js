@@ -1,10 +1,11 @@
 var express = require("express");
-const { getResponse, createResponse } = require("../controllers/Response");
+const { getResponse, createRespose } = require("../controllers/Response");
 
 var router = express.Router();
+const { checkAuth } = require("../middleware/auth_validate");
 
 // Not needed
 // POST '/auth/signup'
-router.get("/list", getResponse);
-router.post("/create", createResponse);
+// router.get("/list", getResponse);
+router.post("/create", checkAuth, createRespose);
 module.exports = router;

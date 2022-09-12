@@ -15,6 +15,7 @@ const examRouter = require("./routes/exam");
 const questionRouter = require("./routes/question");
 const customerRouter = require("./routes/customer");
 const behaviourRouter = require("./routes/behaviour");
+const responseRouter = require("./routes/Response");
 const answerRouter = require("./routes/answer");
 const searchRouter = require("./routes/search");
 const session = require("express-session");
@@ -64,6 +65,7 @@ app.use("/question", questionRouter);
 app.use("/customer", customerRouter);
 app.use("/behaviour", behaviourRouter);
 app.use("/answer", answerRouter);
+app.use("/response", responseRouter);
 app.use("/search", searchRouter);
 
 // catch 404 and forward to error handler

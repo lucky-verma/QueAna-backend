@@ -1,26 +1,32 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const responseSchema = new Schema(
+const userLogSchema = new Schema(
   {
-    // response String,
+    // behaviour String,
     exam_id: {
       type: mongoose.Types.ObjectId,
     },
     question_id: {
       type: mongoose.Types.ObjectId,
     },
-    answer_id: {
-      type: mongoose.Types.ObjectId,
-    },
     user_id: {
       type: mongoose.Types.ObjectId,
     },
-
-    confidence: {
-      type: Number,
+    type: {
+      type: String,
+      enum: [
+        "Search",
+        "Click",
+        "Next",
+        "Back",
+        "Submit",
+        "Start",
+        "Stop",
+        "Login",
+      ],
     },
-    comment: {
+    action: {
       type: String,
     },
   },
@@ -32,6 +38,6 @@ const responseSchema = new Schema(
   }
 );
 
-const ResponseModel = mongoose.model("response", responseSchema);
+const UserlogModel = mongoose.model("behaviour", userLogSchema);
 
-module.exports = ResponseModel;
+module.exports = UserlogModel;

@@ -15,6 +15,7 @@ exports.getExam = async (req, res, next) => {
   const exam = await ExamModel.find();
   return res.status(200).json({ sucess: true, exam });
 };
+
 exports.getExamDetails = async (req, res, next) => {
   // console.log(req);
   if (!req.params.exam_id) {
@@ -50,6 +51,26 @@ exports.getExamDetails = async (req, res, next) => {
   exam[0].questions_available = questions_available;
 
   return res.status(200).json({ sucess: true, exam });
+};
+
+//Get list of exams
+exports.getScheduledExam = async (req, res, next) => {
+  const exam = await ExamModel.aggregate([
+    {
+      $match: {
+        end_time: {
+          $gte: new Date(),
+        },
+      },
+    },
+    {
+      $sort: {
+        start_time: -1,
+      },
+    },
+  ]);
+
+  return res.status(200).json({ success: true, exam });
 };
 
 exports.createExam = async (req, res, next) => {

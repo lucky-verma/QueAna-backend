@@ -3,7 +3,9 @@ const {
   getQuestions,
   createQuestions,
   getQuestionById,
+  getExamQuestion,
 } = require("../controllers/Questions");
+const { checkAuth } = require("../middleware/auth_validate");
 
 var router = express.Router();
 
@@ -12,4 +14,5 @@ var router = express.Router();
 router.get("/list", getQuestions);
 router.post("/create", createQuestions);
 router.get("/question", getQuestionById);
+router.get("/get_user_question", checkAuth, getExamQuestion);
 module.exports = router;
