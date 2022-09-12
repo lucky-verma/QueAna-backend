@@ -1,3 +1,4 @@
+const { Types } = require("mongoose");
 const { fetchUserIdFromToken } = require("../middleware/auth_validate");
 const BehaviourModel = require("../models/Behaviour");
 const BEHAVIOUR_FIELDS = ["exam_id", "pre_reflection"];
@@ -48,11 +49,12 @@ exports.createBehaviour = async (req, res, next) => {
 };
 
 exports.updateBehaviour = async (req, res, next) => {
+  console.log(req.body.behavour_id);
   const Behaviour = await BehaviourModel.updateOne(
-    {
-      _id: req.body.behaviour_id,
-    },
+    { _id: Types.ObjectId(req.body.behavour_id) },
     { $set: { post_reflection: req.body.post_reflection } }
   );
+
+  console.log(req.body, Behaviour);
   res.status(200).json({ sucess: true, Behaviour });
 };

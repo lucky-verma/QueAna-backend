@@ -12,5 +12,5 @@ var router = express.Router();
 // POST '/auth/signup'
 router.get("/fetch", getUserBehaviour);
 router.post("/create", createBehaviour);
-router.post("/update", updateBehaviour);
+router.patch("/update", updateBehaviour);
 module.exports = router;

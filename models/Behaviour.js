@@ -12,9 +12,11 @@ const behaviourSchema = new Schema(
     },
     pre_reflection: {
       type: String,
+      default: "",
     },
-    pos_reflection: {
+    post_reflection: {
       type: String,
+      default: "",
     },
   },
   {

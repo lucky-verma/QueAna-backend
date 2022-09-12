@@ -8,9 +8,9 @@ const {
   getUserInfo,
 } = require("../controllers/aunthentication");
 const { checkAuth } = require("../middleware/auth_validate");
-router.post("/signup", checkAuth, signUpController);
+router.post("/signup", signUpController);
 router.post("/login", loginController);
-router.get("/user_info", getUserInfo);
+router.get("/user_info", checkAuth, getUserInfo);
 router.get("/logout", (req, res, next) => {
   req.session.destroy((err) => {
     res.redirect("/login");
