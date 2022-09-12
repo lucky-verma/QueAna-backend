@@ -224,7 +224,63 @@ exports.getExamQuestion = async (req, res, next) => {
     question: nextQuestion[0],
   });
 };
+exports.getExamQuestionResult = async (req, res, next) => {
+  const userId = await fetchUserIdFromToken(
+    req.headers.authorization.split(" ")[1]
+  );
+  let examID = req.query.exam_id;
+  let questionNo = req.query.question_no;
+  if (!questionNo) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Question no does not exists" });
+  }
 
+  const fetchExam = await ExamModel.findOne({ _id: examID });
+  if (fetchExam == null) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Exam does not exists" });
+  }
+
+  if (fetchExam.total_questions < questionNo) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Question no is invalid" });
+  }
+  if (fetchExam.start_time < new Date() && new Date() < fetchExam.end_time) {
+    console.log(fetchExam.start_time < new Date());
+  } else {
+    console.log(fetchExam.start_time < new Date());
+    return res.status(401).json({
+      success: false,
+      message: "Exam is either completed or not started.",
+    });
+  }
+
+  //CHECK IF BEHAVIOUR
+  const behaviour = await BehaviourModel.find({
+    exam_id: examID,
+    user_id: userId,
+  });
+
+  if (behaviour.length == 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Reflection Required",
+    });
+  }
+
+  //This is the next question of exam
+  let nextQuestion = await QuestionsModel.aggregate(
+    questionAggregationWithSolution(examID, questionNo)
+  );
+
+  return res.status(200).json({
+    success: true,
+    question: nextQuestion[0],
+  });
+};
 const questionAggregation = (exam_id, question_no) => {
   return [
     {
@@ -264,6 +320,54 @@ const questionAggregation = (exam_id, question_no) => {
           {
             $project: {
               is_correct: 0,
+              question_id: 0,
+            },
+          },
+        ],
+        as: "answers",
+      },
+    },
+  ];
+};
+const questionAggregationWithSolution = (exam_id, question_no) => {
+  return [
+    {
+      $match: {
+        exam_id: Types.ObjectId(exam_id),
+        question_no: parseInt(question_no),
+      },
+    },
+    {
+      $lookup: {
+        from: "exams",
+        localField: "exam_id",
+        foreignField: "_id",
+        as: "exam",
+      },
+    },
+    {
+      $unwind: {
+        path: "$exam",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "answers",
+        let: {
+          question_id: "$_id",
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$question_id", "$$question_id"],
+              },
+            },
+          },
+          {
+            $project: {
+              // is_correct: 0,
               question_id: 0,
             },
           },

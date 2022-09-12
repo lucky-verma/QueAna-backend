@@ -8,10 +8,122 @@ const RESPONSE_FIELD = [
   "comment",
 ];
 const { fetchUserIdFromToken } = require("../middleware/auth_validate");
+const { Types } = require("mongoose");
 
 exports.getRespose = async (req, res, next) => {
-  const response = await ResposeModel.find();
-  res.status(200).json({ sucess: true, response });
+  const userId = await fetchUserIdFromToken(
+    req.headers.authorization.split(" ")[1]
+  );
+  const response = await ResponseModel.aggregate([
+    {
+      $match: {
+        user_id: Types.ObjectId(userId),
+        question_id: Types.ObjectId(req.query.question_id),
+        exam_id: Types.ObjectId(req.query.exam_id),
+      },
+    },
+    {
+      $lookup: {
+        from: "questions",
+        localField: "question_id",
+        foreignField: "_id",
+        as: "question",
+      },
+    },
+    {
+      $unwind: {
+        path: "$question",
+      },
+    },
+  ]);
+
+  return res.status(200).json({ sucess: true, response });
+};
+
+exports.getQuestionWiseResponse = async (req, res, next) => {
+  const userId = await fetchUserIdFromToken(
+    req.headers.authorization.split(" ")[1]
+  );
+  const response = await ResponseModel.aggregate([
+    {
+      $match: {
+        user_id: Types.ObjectId(userId),
+        exam_id: Types.ObjectId(req.query.exam_id),
+      },
+    },
+    {
+      $lookup: {
+        from: "questions",
+        localField: "question_id",
+        foreignField: "_id",
+        as: "question",
+      },
+    },
+    {
+      $unwind: {
+        path: "$question",
+      },
+    },
+    {
+      $lookup: {
+        from: "answers",
+        localField: "answer_id",
+        foreignField: "_id",
+        as: "answer",
+      },
+    },
+    {
+      $unwind: {
+        path: "$answer",
+      },
+    },
+    {
+      $lookup: {
+        from: "exams",
+        localField: "exam_id",
+        foreignField: "_id",
+        as: "exam",
+      },
+    },
+    {
+      $unwind: {
+        path: "$exam",
+      },
+    },
+  ]);
+  let questionList = [];
+  let correctList = [];
+  let finalOutPut = [];
+  let questionCount = 0;
+  if (response.length > 0) {
+    console.log("easy");
+    if (parseInt(response[0].exam.total_questions) != response.length) {
+      console.log(parseInt(response[0].exam.total_questions, response.length));
+      return res.status(400).json({ success: false, message: "empty" });
+    } else {
+      questionCount = response.length;
+      for (let index = 0; index < response.length; index++) {
+        const element = response[index];
+        questionList.push(element.question.question_no);
+        correctList.push(element.answer.is_correct);
+      }
+    }
+
+    for (
+      let index = 1;
+      index <= parseInt(response[0].exam.total_questions);
+      index++
+    ) {
+      finalOutPut.push({
+        question_no: index,
+        correct: correctList[questionList.indexOf(index)],
+      });
+    }
+
+    console.log(finalOutPut, "OPtoek");
+    return res.status(200).json({ success: true, body: finalOutPut });
+  }
+  return res.status(400).json({ success: false, message: "response 0" });
 };
 
 exports.createRespose = async (req, res, next) => {

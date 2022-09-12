@@ -10,6 +10,7 @@ const userLogSchema = new Schema(
     question_id: {
       type: mongoose.Types.ObjectId,
     },
+    page: { type: String },
     user_id: {
       type: mongoose.Types.ObjectId,
     },
@@ -18,6 +19,8 @@ const userLogSchema = new Schema(
       enum: [
         "Search",
         "Click",
+        "Page Jump",
+        "Field Value",
         "Next",
         "Back",
         "Submit",
@@ -29,6 +32,15 @@ const userLogSchema = new Schema(
     action: {
       type: String,
     },
+    field_name: {},
+    field_value: {},
+    answer_id: {
+      type: mongoose.Types.ObjectId,
+    },
+
+    timestamp: {
+      type: Date,
+    },
   },
   {
     timestamps: {
@@ -38,6 +50,6 @@ const userLogSchema = new Schema(
   }
 );
 
-const UserlogModel = mongoose.model("behaviour", userLogSchema);
+const UserlogModel = mongoose.model("user_log", userLogSchema);
 
 module.exports = UserlogModel;
