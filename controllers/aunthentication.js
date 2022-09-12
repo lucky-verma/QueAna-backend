@@ -35,7 +35,7 @@ exports.signUpController = (req, res, next) => {
     .then((user) => {
       // > If username exists already send the error
       if (user) {
-        res.json({
+        res.status(401).json({
           successMessage: false,
           errorMessage: "Username already exists.",
         });
