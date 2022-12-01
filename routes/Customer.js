@@ -1,5 +1,5 @@
 var express = require("express");
-const { getCustomer, createCustomer } = require("../controllers/Customer");
+const { getCustomer, createCustomer } = require("../controllers/customer");
 
 var router = express.Router();
 
