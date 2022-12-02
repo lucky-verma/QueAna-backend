@@ -50,6 +50,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
+
     // cookie: { maxAge: 3600000 } // 1 hour
     resave: true,
     saveUninitialized: false,
@@ -91,5 +92,18 @@ process.on("unhandledRejection", (err, promise) => {
   // Close server & exit process
   // server.close(() => process.exit(1));
 });
+app.listen(process.env.PORT, listener);
+function listener() {
+  setTimeout(() => {
+    const message = `Product Management Server is listening on PORT ${process.env.PORT}`;
+    console.log(message);
+    // global.logger.log("info", message);
+    // global.dbLogger.log({
+    //   level: "info",
+    //   category: "info",
+    //   data: message,
+    // });
+  }, 1000);
+}
 
 module.exports = app;
