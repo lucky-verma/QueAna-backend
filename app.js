@@ -60,16 +60,16 @@ app.use(
 );
 
 // app.use("/", indexRouter);
-app.use("/auth", authRouter);
-app.use("/exam", examRouter);
-app.use("/users", usersRouter);
-app.use("/question", questionRouter);
-app.use("/customer", customerRouter);
-app.use("/behaviour", behaviourRouter);
-app.use("/answer", answerRouter);
-app.use("/response", responseRouter);
+app.use("/service/auth", authRouter);
+app.use("/service/exam", examRouter);
+app.use("/service/users", usersRouter);
+app.use("/service/question", questionRouter);
+app.use("/service/customer", customerRouter);
+app.use("/service/behaviour", behaviourRouter);
+app.use("/service/answer", answerRouter);
+app.use("/service/response", responseRouter);
 // app.use("/search", searchRouter);
-app.use("/log", userLogRouter);
+app.use("/service/log", userLogRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
