@@ -7,6 +7,7 @@ const connectDB = require("./utils/db");
 const dotenv = require("dotenv");
 const colors = require("colors");
 // const bodyParser = require("÷")
+var http = require("http");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -92,18 +93,49 @@ process.on("unhandledRejection", (err, promise) => {
   // Close server & exit process
   // server.close(() => process.exit(1));
 });
-app.listen(process.env.PORT, listener);
-function listener() {
-  setTimeout(() => {
-    const message = `Product Management Server is listening on PORT ${process.env.PORT}`;
-    console.log(message);
-    // global.logger.log("info", message);
-    // global.dbLogger.log({
-    //   level: "info",
-    //   category: "info",
-    //   data: message,
-    // });
-  }, 1000);
-}
+// app.listen(process.env.PORT, listener);
+// function listener() {
+//   setTimeout(() => {
+//     const message = `Product Management Server is listening on PORT ${process.env.PORT}`;
+//     console.log(message);
+//     // global.logger.log("info", message);
+//     // global.dbLogger.log({
+//     //   level: "info",
+//     //   category: "info",
+//     //   data: message,
+//     // });
+//   }, 1000);
+// }
+var port = normalizePort(process.env.PORT || "3000");
+console.log(port);
+app.set("port", port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
 
 module.exports = app;
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
